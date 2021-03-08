@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const queries = require('./queries')
 
 const app = express()
 const port = process.env.PORT || 9000
@@ -17,8 +18,9 @@ app.use(cors(corsOptions))
 
 
 app.get('/', (request, response) => {
-    User.query()
-    .then(users => response.send({ users: users}))
+    // User.query()
+    // .then(users => response.send({ users: users}))
+    queries.listAll().then(users => response.send({ users: users}))
 
 })
 
