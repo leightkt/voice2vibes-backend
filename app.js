@@ -23,8 +23,13 @@ app.get('/users/:id', (request, response) => {
     let id= parseInt(request.params.id)
     User.query()
     .where('id', id)
-    .eager('usercommands')
-    .then(users => response.send({ users: users }))
+    .withGraphFetched('usercommands')
+    .then(thisuser => response.send({ user: {
+        id: thisuser[0].id, 
+        username: thisuser[0].username, 
+        usercommands: thisuser[0].usercommands 
+        }
+    }))
 
 })
 
