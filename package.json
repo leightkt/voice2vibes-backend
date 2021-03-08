@@ -14,6 +14,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "knex": "^0.95.1",
+    "objection": "^2.2.14",
     "pg": "^8.5.1"
   },
   "devDependencies": {

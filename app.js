@@ -7,13 +7,19 @@ const corsOptions = {
     origin: '*',
     methods: 'GET,POST,PUT,PATCH,DELETE'
 }
+const database = require('./database/Database')
+const { Model } = require('objection')
+Model.knex(database)
+const User = require('./models/User')
 
 app.use(cors(corsOptions))
 
 
 
 app.get('/', (request, response) => {
-    response.send({message: "THE ROUTE WORKED!"})
+    User.query()
+    .then(users => response.send({ users: users}))
+
 })
 
 
