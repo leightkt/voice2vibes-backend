@@ -13,15 +13,18 @@ const { Model } = require('objection')
 Model.knex(database)
 const User = require('./models/User')
 const Command = require('./models/Command')
+const UserCommand = require('./models/UserCommand')
 
 app.use(cors(corsOptions))
 
 
 
-app.get('/', (request, response) => {
-    Command.query()
-    .then(commands => response.send({ commands: commands}))
-    // queries.listAll().then(users => response.send({ users: users}))
+app.get('/users/:id', (request, response) => {
+    let id= parseInt(request.params.id)
+    User.query()
+    .where('id', id)
+    .eager('usercommands')
+    .then(users => response.send({ users: users }))
 
 })
 
