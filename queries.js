@@ -16,6 +16,17 @@ module.exports = {
                 .withGraphFetched('usercommands')
     },
 
+    login(params) {
+        const foundUser = User.query()
+                .where('username', params.username)
+                .where('password', params.password)
+        if(foundUser){
+            return foundUser
+        } else {
+            return { errors: "Wrong Credentials"}
+        }
+    },
+
     createUser(user) {
         const newUser = User.query().insert({
             username: user.username,
@@ -41,6 +52,15 @@ module.exports = {
     deleteUser(id) {
         const userDeleted = User.query().deleteById(id)
         return userDeleted
+    },
+
+    updateUserCommand(params) {
+        const updatedUserCommand = UserCommand.query()
+            .findById(params.id)
+            .patch({
+                phrase: params.phrase
+            })
+        return updatedUserCommand
     }
 
 
