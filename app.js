@@ -10,4 +10,11 @@ const corsOptions = {
 
 app.use(cors(corsOptions))
 
+
+
+app.get('/', (request, response) => {
+    response.send({message: "THE ROUTE WORKED!"})
+})
+
+
 app.listen(port, () => console.log(`running on ${port}`))
