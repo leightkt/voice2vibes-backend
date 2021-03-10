@@ -10,12 +10,13 @@ const corsOptions = {
 }
 const database = require('./database/Database')
 const bodyParser = require('body-parser')
+const bcrypt = require('bcrypt')
 
 const { Model } = require('objection')
 Model.knex(database)
-const User = require('./models/User')
-const UserCommand = require('./models/UserCommand')
-const { updateUserCommand } = require('./queries')
+// const User = require('./models/User')
+// const UserCommand = require('./models/UserCommand')
+// const { updateUserCommand } = require('./queries')
 
 app.use( cors(corsOptions) )
 app.use( bodyParser.urlencoded({ extended: false}) )
@@ -38,16 +39,25 @@ app.get('/users/:id', (request, response) => {
 })
 
 app.post('/users', (request, response) => {
-    queries.createUser(request.body)
-    .then(user => queries.createNewUserCommands(user.id))
-    .then(user => queries.showUser(user.id))
-    .then(thisuser => response.send({ user: {
-        id: thisuser[0].id, 
-        username: thisuser[0].username, 
-        usercommands: thisuser[0].usercommands 
-        }
-    }))
-    
+    bcrypt.hash(request.body.password, 12)
+        .then(hashedPassword => {
+            const user = {
+                username: request.body.username,
+                password: hashedPassword
+            }
+            queries.createUser(user)
+            .then(user => queries.createNewUserCommands(user.id))
+            .then(user => queries.showUser(user.id))
+            .then(thisuser => response.send({ user: {
+                id: thisuser[0].id, 
+                username: thisuser[0].username, 
+                usercommands: thisuser[0].usercommands 
+                }
+            }))
+        .catch(error => {
+            response.json({ errors: error.message })
+        })
+    })
 
 })
 
@@ -60,17 +70,21 @@ app.delete('/users/:id', (request, response) => {
 app.post('/login', (request, response) => {
     queries.login(request.body)
     .then(result => {
-        if(result[0]){
-            queries.showUser(result[0].id)
-            .then(thisuser => response.send({ user: {
-                id: thisuser[0].id, 
-                username: thisuser[0].username, 
-                usercommands: thisuser[0].usercommands 
-                }
-            }))
+        if(result.id){
+            return bcrypt.compare(request.body.password, result.password)
         } else {
-            response.send({ errors: "Invalid Credentials"})
+            throw new Error("username not found")
         }
+    })
+    .then(passwordComparison => {
+        if(!passwordComparison) {
+            throw new Error("incorrect password")
+        } else {
+            response.send({ message: "it worked!"})
+        }
+    })
+    .catch(error => {
+        response.send({ errors: error.message })
     })
 })
 

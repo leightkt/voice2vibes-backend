@@ -4,6 +4,8 @@ const { Model } = require('objection')
 Model.knex(database)
 const User = require('./models/User')
 const UserCommand = require('./models/UserCommand')
+const bcrypt = require('bcrypt')
+const { response } = require('express')
 
 module.exports = { 
     allUsers() {
@@ -16,15 +18,11 @@ module.exports = {
                 .withGraphFetched('usercommands')
     },
 
-    login(params) {
+    login(user) {
         const foundUser = User.query()
-                .where('username', params.username)
-                .where('password', params.password)
-        if(foundUser){
+            .where('username', user.username)
+            .first()
             return foundUser
-        } else {
-            return { errors: "Wrong Credentials"}
-        }
     },
 
     createUser(user) {
