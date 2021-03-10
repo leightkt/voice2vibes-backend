@@ -60,7 +60,7 @@ app.post('/users', (request, response) => {
                 })   
             })
         .catch(error => {
-            response.json({ errors: error.message })
+            response.json({ errors: "username already taken" })
         })
     })
 
