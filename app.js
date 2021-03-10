@@ -67,7 +67,7 @@ app.post('/users', (request, response) => {
 })
 
 app.delete('/users/:id', authenticate, (request, response) => {
-        // request.user.username
+        // request.user.username if pulling from authenticate
         queries.deleteUser(request.params.id)
             // .then(response.status(204))
         .then(user => response.send({deleted: user}))
@@ -121,11 +121,17 @@ app.post('/usercommands/:id', authenticate, (request, response) => {
 })
 
 function authenticate(request, response, next){
-    const authHeader = request.get("Authorization")
-    const token = authHeader.split(" ")[1]
     const secret = "bootsandbuffalosauce"
+    const authHeader = request.get("Authorization")
+    if(!authHeader){
+        response.json({ errors: "no token"})
+    }
+    
+    const token = authHeader.split(" ")[1]
+    
+    
     jwt.verify(token, secret, (error, payload) => {
-        if(error) response.json({ errors :error.message })
+        if(error) response.json({ errors: error.message })
 
         queries.findUser(payload.username)
         .then(user => {
