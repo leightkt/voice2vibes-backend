@@ -4,8 +4,6 @@ const { Model } = require('objection')
 Model.knex(database)
 const User = require('./models/User')
 const UserCommand = require('./models/UserCommand')
-// const bcrypt = require('bcrypt')
-// const { response } = require('express')
 
 module.exports = { 
     allUsers() {
@@ -18,10 +16,11 @@ module.exports = {
                 .withGraphFetched('usercommands')
     },
 
-    login(user) {
+    findUser(username) {
         const foundUser = User.query()
-            .where('username', user.username)
+            .where('username', username)
             .first()
+            .withGraphFetched('usercommands')
             return foundUser
     },
 

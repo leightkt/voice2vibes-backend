@@ -11,9 +11,7 @@ const corsOptions = {
 const database = require('./database/Database')
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
-
-// const { Model } = require('objection')
-// Model.knex(database)
+const jwt = require('jsonwebtoken')
 
 app.use( cors(corsOptions) )
 app.use( bodyParser.urlencoded({ extended: false}) )
@@ -45,12 +43,22 @@ app.post('/users', (request, response) => {
             queries.createUser(user)
             .then(user => queries.createNewUserCommands(user.id))
             .then(user => queries.showUser(user.id))
-            .then(thisuser => response.send({ user: {
-                id: thisuser[0].id, 
-                username: thisuser[0].username, 
-                usercommands: thisuser[0].usercommands 
-                }
-            }))
+            .then(thisuser => {
+                const payload = { username: thisuser[0].username }
+                const secret = "bootsandbuffalosauce"
+
+                jwt.sign(payload, secret, (error, token) => {
+                    if (error) throw new Error("Signing Token didn't work")
+                    
+                    response.send({ user: {
+                        token: token,
+                        id: thisuser[0].id, 
+                        username: thisuser[0].username, 
+                        usercommands: thisuser[0].usercommands 
+                        }
+                    })
+                })   
+            })
         .catch(error => {
             response.json({ errors: error.message })
         })
@@ -58,26 +66,46 @@ app.post('/users', (request, response) => {
 
 })
 
-app.delete('/users/:id', (request, response) => {
-    queries.deleteUser(request.params.id)
-    // .then(response.status(204))
-    .then(user => response.send({deleted: user}))
+app.delete('/users/:id', authenticate, (request, response) => {
+        // request.user.username
+        queries.deleteUser(request.params.id)
+            // .then(response.status(204))
+        .then(user => response.send({deleted: user}))
+        .catch(error => {
+            response.json({ errors :error.message })
+        })
 })
 
 app.post('/login', (request, response) => {
-    queries.login(request.body)
-    .then(result => {
-        if(result.id){
-            return bcrypt.compare(request.body.password, result.password)
+    queries.findUser(request.body.username)
+    .then(retrievedUser => {
+        if(retrievedUser.id){
+            return Promise.all([
+                bcrypt.compare(request.body.password, retrievedUser.password),
+                Promise.resolve(retrievedUser)
+            ])
         } else {
             throw new Error("username not found")
         }
     })
-    .then(passwordComparison => {
-        if(!passwordComparison) {
+    .then(results => {
+        if(!results[0]) {
             throw new Error("incorrect password")
         } else {
-            response.send({ message: "it worked!"})
+            const payload = { username: results[1].username}
+            const secret = "bootsandbuffalosauce"
+
+            jwt.sign(payload, secret, (error, token) => {
+                if (error) throw new Error("Signing Token didn't work")
+
+                response.send({ user: {
+                    token: token,
+                    id: results[1].id,
+                    username: results[1].username,
+                    usercommands: results[1].usercommands
+                }})
+            })
+
         }
     })
     .catch(error => {
@@ -85,12 +113,29 @@ app.post('/login', (request, response) => {
     })
 })
 
-app.post('/usercommands/:id', (request, response) => {
+app.post('/usercommands/:id', authenticate, (request, response) => {
     const phrase = request.body.phrase
     const id = request.params.id
     queries.updateUserCommand({ phrase: phrase, id: id })
     .then(updatedUserCommand => response.send({updatedUserCommand}))
 })
 
+function authenticate(request, response, next){
+    const authHeader = request.get("Authorization")
+    const token = authHeader.split(" ")[1]
+    const secret = "bootsandbuffalosauce"
+    jwt.verify(token, secret, (error, payload) => {
+        if(error) response.json({ errors :error.message })
+
+        queries.findUser(payload.username)
+        .then(user => {
+            request.user = user
+            next()
+        })
+        .catch(error => {
+            response.json({ errors :error.message })
+        })
+    })
+}
 
 app.listen(port, () => console.log(`running on ${port}`))
