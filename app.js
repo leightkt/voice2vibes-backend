@@ -79,7 +79,7 @@ app.delete('/users/:id', authenticate, (request, response) => {
 app.post('/login', (request, response) => {
     queries.findUser(request.body.username)
     .then(retrievedUser => {
-        if(retrievedUser.id){
+        if(retrievedUser){
             return Promise.all([
                 bcrypt.compare(request.body.password, retrievedUser.password),
                 Promise.resolve(retrievedUser)
@@ -117,7 +117,16 @@ app.post('/usercommands/:id', authenticate, (request, response) => {
     const phrase = request.body.phrase
     const id = request.params.id
     queries.updateUserCommand({ phrase: phrase, id: id })
-    .then(updatedUserCommand => response.send({updatedUserCommand}))
+    .then(updatedUserCommand => response.send({ updatedUserCommand }))
+})
+
+app.get('/profile', authenticate, (request, response) => {
+    response.json({
+            id: request.user.id,
+            username: request.user.username,
+            usercommands: request.user.usercommands
+        }
+    )
 })
 
 function authenticate(request, response, next){
@@ -126,7 +135,7 @@ function authenticate(request, response, next){
     if(!authHeader){
         response.json({ errors: "no token"})
     }
-    
+
     const token = authHeader.split(" ")[1]
     
     
