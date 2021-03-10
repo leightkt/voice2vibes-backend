@@ -12,11 +12,8 @@ const database = require('./database/Database')
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 
-const { Model } = require('objection')
-Model.knex(database)
-// const User = require('./models/User')
-// const UserCommand = require('./models/UserCommand')
-// const { updateUserCommand } = require('./queries')
+// const { Model } = require('objection')
+// Model.knex(database)
 
 app.use( cors(corsOptions) )
 app.use( bodyParser.urlencoded({ extended: false}) )

@@ -4,8 +4,8 @@ const { Model } = require('objection')
 Model.knex(database)
 const User = require('./models/User')
 const UserCommand = require('./models/UserCommand')
-const bcrypt = require('bcrypt')
-const { response } = require('express')
+// const bcrypt = require('bcrypt')
+// const { response } = require('express')
 
 module.exports = { 
     allUsers() {
