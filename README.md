@@ -53,7 +53,7 @@ SET UP YOUR PARTY
 
 BLUETOOTH LOW ENERGY
 
-Bluetooth Low Energy (BLE) is moder bluetooth technology that uses lower power consumption. This allows applications to run on a small battery.  
+Bluetooth Low Energy (BLE) is modern bluetooth technology that uses lower power consumption. This allows applications to run on a small battery.  
 BLE remains in sleep mode constantly except for when a connection is initiation.  
 Connections are short and data transfer is fast.  
 Most of our modern devices use BLE.  
