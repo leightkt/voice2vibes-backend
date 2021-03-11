@@ -4,7 +4,7 @@ exports.up = function(knex) {
         table.increments('id')
         table.string('phrase')
         table.integer('user_id')
-        table.foreign('user_id').references('users.id')
+        table.foreign('user_id').references('users.id').onDelete('CASCADE')
         table.integer('command_id')
         table.foreign('command_id').references('commands.id')
     })

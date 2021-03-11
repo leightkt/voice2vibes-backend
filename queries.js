@@ -47,9 +47,9 @@ module.exports = {
     },
 
     deleteUser(id) {
-        UserCommand.query()
-        .where('user_id', id)
-        .delete()
+        // UserCommand.query()
+        // .where('user_id', id)
+        // .delete()
 
         const userDeleted = User.query().deleteById(id)
         return userDeleted

@@ -15,7 +15,8 @@ APP FEATURES
 
 This app allows a user to login with a username and password.  
 A new user can create an account (username must be unique and password must be between 6 and 12 characters).  
-A user can connect a Moxie vibrator via bluetooth. 
+A user can connect a Moxie vibrator via bluetooth.  
+The user is alerted when the device disconnects.   
 The app shows when a device is connected/ not connected.   
 A user can view all available commands.  
 A new user is given default commands.  
