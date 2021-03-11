@@ -91,7 +91,7 @@ This app may also be a great edition to those in long distance relationships or 
 This app uses inclusive language by refraining from using unnecessarily gendered language.  
 
 ## TECHNOLOGY
-This app was created using Node.js, Express, Knex, Objection, Bcrypt, JWT, ActiveRecord, React, React Router, Web Speech API, Web Bluetooth API, Javascript, HTML, CSS, and postgresQL. 
+This app was created using Node.js, Express, Knex, Objection, Bcrypt, JWT, React, React Router, Web Speech API, Web Bluetooth API, Javascript, HTML, CSS, and postgresQL. 
 
 ## DEPLOYMENT
 Backend repo: https://github.com/leightkt/voice2vibes-frontend 
