@@ -96,9 +96,7 @@ This app was created using Node.js, Express, Knex, Objection, Bcrypt, JWT, React
 ## DEPLOYMENT
 Backend repo: https://github.com/leightkt/voice2vibes-frontend 
 
-To use this app, download the backend files from the repo, cd into the backend folder, and run npm install, createdb voice2vibes_development, knex migrate:latest, knex seed:run. 
-
-Download the frontend, run npm install, and then npm start.  
+This app is deployed at: https://voice2vibes.web.app/ 
 
 Enable experimental web platform features preferenes (set to enabled) by visiting chrome://flags (for Web Bluetooth API).
 
