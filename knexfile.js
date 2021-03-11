@@ -18,7 +18,8 @@ module.exports = {
     extra: {
       ssl: {
         rejectUnauthorized: false,
-      },
+      }
+    },
     connection: process.env.DATABASE_URL,
     migrations: {
       directory: __dirname + '/migrations'
