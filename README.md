@@ -29,7 +29,8 @@ A user can stop "continous listen mode" by clicking "STOP".
 A user can start the vibrator by clicking "ON".  
 A user can stop the vibrator by clicking "OFF".  
 A user can set a custom voice command by clicking a command card, clicking "start", speaking a command, then clicking, "save".  
-User's account information and commands are stored in a postgresQL database, so the information is stored from session to session.   
+User's account information and commands are stored in a postgresQL database, so the information is stored from session to session.  
+A user can delete their profile (and associated commands).    
 
 ## API
 The backend of this app is set up as a Node.js/Express API to fetch users and commands. 
