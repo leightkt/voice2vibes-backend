@@ -45,7 +45,7 @@ app.post('/users', (request, response) => {
             .then(user => queries.showUser(user.id))
             .then(thisuser => {
                 const payload = { username: thisuser[0].username }
-                const secret = "bootsandbuffalosauce"
+                const secret = process.env.SECRET_KEY_BASE
 
                 jwt.sign(payload, secret, (error, token) => {
                     if (error) throw new Error("Signing Token didn't work")
@@ -93,7 +93,7 @@ app.post('/login', (request, response) => {
             throw new Error("incorrect password")
         } else {
             const payload = { username: results[1].username}
-            const secret = "bootsandbuffalosauce"
+            const secret = process.env.SECRET_KEY_BASE
 
             jwt.sign(payload, secret, (error, token) => {
                 if (error) throw new Error("Signing Token didn't work")
@@ -130,7 +130,7 @@ app.get('/profile', authenticate, (request, response) => {
 })
 
 function authenticate(request, response, next){
-    const secret = "bootsandbuffalosauce"
+    const secret = process.env.SECRET_KEY_BASE
     const authHeader = request.get("Authorization")
     if(!authHeader){
         response.json({ errors: "no token"})
