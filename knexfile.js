@@ -1,5 +1,5 @@
 // Update with your config settings.
-// const pg = require('pg')
+const pg = require('pg')
 // pg.defaults.ssl = true
 
 module.exports = {
