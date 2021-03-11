@@ -2,7 +2,7 @@
   "name": "voice-2-vibes-backend",
   "version": "1.0.0",
   "description": "api for app that communicates with a wevibe using webspeech api and web bluetooth api",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
