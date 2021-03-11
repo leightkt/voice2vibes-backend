@@ -10,7 +10,7 @@ module.exports = {
   staging: {
   },
 
-  production: {,
+  production: {
     client: 'pg',
     connection: process.env.DATABASE_URL,
     migrations: {
