@@ -1,6 +1,6 @@
 // Update with your config settings.
-const pg = require('pg')
-pg.defaults.ssl = true
+// const pg = require('pg')
+// pg.defaults.ssl = true
 
 module.exports = {
 
@@ -14,7 +14,11 @@ module.exports = {
 
   production: {
     client: "pg",
-    ssl: { rejectUnauthorized: false },
+    ssl: true,
+    extra: {
+      ssl: {
+        rejectUnauthorized: false,
+      },
     connection: process.env.DATABASE_URL,
     migrations: {
       directory: __dirname + '/migrations'
