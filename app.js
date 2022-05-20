@@ -17,11 +17,6 @@ app.use( cors(corsOptions) )
 app.use( bodyParser.urlencoded({ extended: false}) )
 app.use( bodyParser.json() )
 
-app.get('/users/', (request, response) => {
-    queries.allUsers()
-        .then(users => response.send({ users: users }))
-})
-
 app.get('/users/:id', (request, response) => {
     queries.showUser(+request.params.id)
         .then(thisuser => response.send({ user: {
