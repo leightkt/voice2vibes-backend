@@ -6,10 +6,6 @@ const User = require('./models/User')
 const UserCommand = require('./models/UserCommand')
 
 module.exports = { 
-    allUsers() {
-        return User.query()
-    },
-
     showUser(id) {
         return User.query()
                 .where('id', id)
